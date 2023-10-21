@@ -9,7 +9,7 @@ import (
 
 type Repository interface {
 	CreatePatientRequest(*models.ConsultationRequest) int
-	GetRecommendation(int) ([]models.DoctorRecomemndation, error)
+	GetRecommendation(req *models.UserInfo) ([]models.DoctorRecomemndation, error)
 	CreateRecommendation(*models.DoctorRecomemndation) int
 }
 
@@ -48,7 +48,11 @@ func (s *service) GetRecommendations(id int) ([]models.DoctorRecomemndation, err
 	if err != nil {
 		return nil, fmt.Errorf("you need to authorize at first, error: %s", err.Error())
 	}
-	return s.repo.GetRecommendation(id)
+	user, err := s.client.GetCurrentUser()
+	if err != nil {
+		return nil, fmt.Errorf("failed to find current user, error: %s", err.Error())
+	}
+	return s.repo.GetRecommendation(user)
 }
 
 func (s *service) CreateRecommendation(req *models.DoctorRecomemndation) (int, error) {

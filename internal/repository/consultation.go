@@ -29,11 +29,11 @@ func (r *repo) CreatePatientRequest(input *models.ConsultationRequest) int {
 	return id
 }
 
-func (r *repo) GetRecommendation(id int) ([]models.DoctorRecomemndation, error) {
+func (r *repo) GetRecommendation(req *models.UserInfo) ([]models.DoctorRecomemndation, error) {
 	var recs []models.DoctorRecomemndation
 	query := "SELECT req_id, recomm FROM recommendations rec JOIN requests r ON rec.req_id = r.id where r.user_id = $1"
 
-	rows, err := r.db.Query(query, id)
+	rows, err := r.db.Query(query, req.Id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find recommendations, error: %s", err.Error())
 	}
@@ -50,6 +50,7 @@ func (r *repo) GetRecommendation(id int) ([]models.DoctorRecomemndation, error) 
 		}
 		consReq.Id = recom.Request.Id
 		recom.Request = *consReq
+		recom.Request.Patient = *req
 		recs = append(recs, recom)
 	}
 	return recs, nil
