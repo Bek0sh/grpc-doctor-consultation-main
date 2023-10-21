@@ -1,0 +1,22 @@
+syntax="proto3";
+
+package proto;
+
+option go_package = "./pkg/proto";
+
+service UserInfo {
+    rpc GetCurrentUser(Empty) returns (GetUserResponse);
+    rpc CheckToken(Empty) returns (Empty);
+    rpc CheckRole(Empty) returns (Empty);
+}
+
+message Empty {}
+
+message GetUserResponse {
+    int32 id = 1;
+    string name = 2;
+    string surname = 3;
+    string phone_number = 4;
+    string user_role = 5;
+    string created_at = 6;
+}
