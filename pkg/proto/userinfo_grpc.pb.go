@@ -25,6 +25,7 @@ type UserInfoClient interface {
 	GetCurrentUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetUserResponse, error)
 	CheckToken(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error)
 	CheckRole(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error)
+	GetUserById(ctx context.Context, in *GetUserByIdRequest, opts ...grpc.CallOption) (*GetUserResponse, error)
 }
 
 type userInfoClient struct {
@@ -62,6 +63,15 @@ func (c *userInfoClient) CheckRole(ctx context.Context, in *Empty, opts ...grpc.
 	return out, nil
 }
 
+func (c *userInfoClient) GetUserById(ctx context.Context, in *GetUserByIdRequest, opts ...grpc.CallOption) (*GetUserResponse, error) {
+	out := new(GetUserResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserInfo/GetUserById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserInfoServer is the server API for UserInfo service.
 // All implementations must embed UnimplementedUserInfoServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type UserInfoServer interface {
 	GetCurrentUser(context.Context, *Empty) (*GetUserResponse, error)
 	CheckToken(context.Context, *Empty) (*Empty, error)
 	CheckRole(context.Context, *Empty) (*Empty, error)
+	GetUserById(context.Context, *GetUserByIdRequest) (*GetUserResponse, error)
 	mustEmbedUnimplementedUserInfoServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedUserInfoServer) CheckToken(context.Context, *Empty) (*Empty, 
 }
 func (UnimplementedUserInfoServer) CheckRole(context.Context, *Empty) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckRole not implemented")
+}
+func (UnimplementedUserInfoServer) GetUserById(context.Context, *GetUserByIdRequest) (*GetUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserById not implemented")
 }
 func (UnimplementedUserInfoServer) mustEmbedUnimplementedUserInfoServer() {}
 
@@ -152,6 +166,24 @@ func _UserInfo_CheckRole_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserInfo_GetUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserInfoServer).GetUserById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.UserInfo/GetUserById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserInfoServer).GetUserById(ctx, req.(*GetUserByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserInfo_ServiceDesc is the grpc.ServiceDesc for UserInfo service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var UserInfo_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckRole",
 			Handler:    _UserInfo_CheckRole_Handler,
+		},
+		{
+			MethodName: "GetUserById",
+			Handler:    _UserInfo_GetUserById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

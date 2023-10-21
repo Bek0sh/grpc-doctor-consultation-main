@@ -5,14 +5,12 @@ import "time"
 type UserInfo struct {
 	Id          int    `json:"-"`
 	FullName    string `json:"full_name"`
-	Birthday    string `json:"birthday"`
 	PhoneNumber string `json:"phone_number"`
-	Email       string `json:"email"`
 	UserType    string `json:"user_type"`
 }
 
 type ConsultationRequest struct {
-	Id          int       `json:"-"`
+	Id          int       `json:"id, omitempty"`
 	Patient     UserInfo  `json:"patient"`
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"created_at"`

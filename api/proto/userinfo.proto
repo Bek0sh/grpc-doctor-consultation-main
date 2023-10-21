@@ -8,6 +8,11 @@ service UserInfo {
     rpc GetCurrentUser(Empty) returns (GetUserResponse);
     rpc CheckToken(Empty) returns (Empty);
     rpc CheckRole(Empty) returns (Empty);
+    rpc GetUserById(GetUserByIdRequest) returns (GetUserResponse);
+}
+
+message GetUserByIdRequest {
+    int32 id = 1;
 }
 
 message Empty {}
