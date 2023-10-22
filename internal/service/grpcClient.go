@@ -36,6 +36,7 @@ func (g *grpcClient) GetCurrentUser() (*models.UserInfo, error) {
 	resp := models.UserInfo{
 		Id:          int(response.GetId()),
 		FullName:    fmt.Sprintf("%s %s", response.GetName(), response.GetSurname()),
+		Email:       response.GetEmail(),
 		UserType:    response.GetUserRole(),
 		PhoneNumber: response.GetPhoneNumber(),
 	}
@@ -54,6 +55,7 @@ func (g *grpcClient) GetUserById(id int) (*models.UserInfo, error) {
 	resp := models.UserInfo{
 		Id:          id,
 		FullName:    fmt.Sprintf("%s %s", response.GetName(), response.GetSurname()),
+		Email:       response.GetEmail(),
 		UserType:    response.GetUserRole(),
 		PhoneNumber: response.GetPhoneNumber(),
 	}

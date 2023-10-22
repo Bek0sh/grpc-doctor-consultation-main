@@ -6,6 +6,7 @@ type UserInfo struct {
 	Id          int    `json:"-"`
 	FullName    string `json:"full_name"`
 	PhoneNumber string `json:"phone_number"`
+	Email       string `json:"email"`
 	UserType    string `json:"user_type"`
 }
 

@@ -23,5 +23,6 @@ message GetUserResponse {
     string surname = 3;
     string phone_number = 4;
     string user_role = 5;
-    string created_at = 6;
+    string email = 6;
+    string created_at = 7;
 }
